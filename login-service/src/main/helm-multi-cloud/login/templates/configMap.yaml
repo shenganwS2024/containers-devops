@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-login-config
+data:
+  MYSQL_DB_HOST: 'mysql-login.default.svc.cluster.local'
+  # TODO: update MYSQL_DB_USER and MYSQL_DB_PASSWORD to match the variables that you used 
+  #       to install the MySQL service
+  MYSQL_DB_USER: 'your_user_name'
+  MYSQL_DB_PASSWORD: 'your_db_password'
+  MYSQL_DB_PORT: '3306'
+  CHAT_ENDPOINT: '35.237.83.78'

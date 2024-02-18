@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-chat-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: spring-chat
+  template:
+    metadata:
+      labels:
+        app: spring-chat
+    spec:
+      containers:
+        - name: group-chat-service
+          image: gcr.io/gcp-docker-kubernetes-413704/chat:1.0.1
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: spring-chat-config
+          resources:
+            requests:
+              cpu: 200m
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: spring-chat-autoscaling
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: spring-chat-deployment
+  minReplicas: 1
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 75

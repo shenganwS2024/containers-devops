@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-login-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: spring-login
+  template:
+    metadata:
+      labels:
+        app: spring-login
+    spec:
+      containers:
+      - name: login-service
+        image: shenganwp2acr.azurecr.io/login:1.0.2
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: spring-login-config
+        resources:
+            requests:
+              cpu: 200m
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: spring-login-autoscaling
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: spring-login-deployment
+  minReplicas: 1
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 75
