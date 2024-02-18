@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: spring-profile-deployment
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: spring-profile
@@ -28,6 +28,7 @@ apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
   name: spring-profile-autoscaling
+  namespace: default
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
