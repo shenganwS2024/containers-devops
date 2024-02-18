@@ -28,7 +28,6 @@ apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
   name: spring-profile-autoscaling
-  namespace: default
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
