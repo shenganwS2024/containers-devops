@@ -332,11 +332,11 @@ jobs:
           needs.check-changed-files.outputs.profile-service-java-any-changed == 'true' ||
           (needs.build-push-image.result == 'skipped' && needs.check-changed-files.outputs.profile-service-helm-multi-cloud-any-changed == 'true') 
         run: |
-          helm upgrade --install profile-service ./profile-service/src/main/helm-multi-cloud/profile
+          helm upgrade --install profile ./profile-service/src/main/helm-multi-cloud/profile
       # TODO: Deploy the new login helm chart to AKS cluster with helm with the bash script in `run`
       - name: Deploy login-service to the cluster with helm
         if: | 
           needs.check-changed-files.outputs.login-service-java-any-changed == 'true' ||
           (needs.build-push-image.result == 'skipped' && needs.check-changed-files.outputs.login-service-helm-multi-cloud-any-changed == 'true')
         run: |
-          helm upgrade --install login-service ./login-service/src/main/helm-multi-cloud/login
+          helm upgrade --install login ./login-service/src/main/helm-multi-cloud/login
