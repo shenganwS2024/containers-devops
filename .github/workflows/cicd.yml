@@ -112,7 +112,8 @@ jobs:
       - name: Build docker image profile-service
         if: needs.check-changed-files.outputs.profile-service-java-any-changed == 'true'
         run: |
-          docker build -t ${{ env.AZ_CONTAINER_REGISTRY }}/profile-service:${{ env.DOCKER_TAG }} -t gcr.io/${{ env.GCP_PROJECT_ID }}/profile-service:${{ env.DOCKER_TAG }} ./profile-service
+          docker build -f ./profile-service/Dockerfile . -t ${{ env.AZ_CONTAINER_REGISTRY }}/profile-service:${{ env.DOCKER_TAG }} -t gcr.io/${{ env.GCP_PROJECT_ID }}/profile-service:${{ env.DOCKER_TAG }}
+        # docker build -t ${{ env.AZ_CONTAINER_REGISTRY }}/profile-service:${{ env.DOCKER_TAG }} -t gcr.io/${{ env.GCP_PROJECT_ID }}/profile-service:${{ env.DOCKER_TAG }} ./profile-service
       # TODO
 
       ## login-service: deploy to both GCP and Azure ##
@@ -120,7 +121,7 @@ jobs:
       - name: Build docker image login-service
         if: needs.check-changed-files.outputs.login-service-java-any-changed == 'true'
         run: |
-          docker build -f ./profile-service/Dockerfile . -t ${{ env.AZ_CONTAINER_REGISTRY }}/profile-service:${{ env.DOCKER_TAG }} -t gcr.io/${{ env.GCP_PROJECT_ID }}/profile-service:${{ env.DOCKER_TAG }}
+          docker build -t ${{ env.AZ_CONTAINER_REGISTRY }}/login-service:${{ env.DOCKER_TAG }} -t gcr.io/${{ env.GCP_PROJECT_ID }}/login-service:${{ env.DOCKER_TAG }} ./login-service
       # TODO
 
       ## chat-service: only deploy to GCP ##
@@ -212,7 +213,9 @@ jobs:
       (needs.build-push-image.result == 'success' && needs.check-changed-files.outputs.chat-service-java-any-changed == 'true') ||
       (needs.build-push-image.result == 'skipped' && needs.check-changed-files.outputs.profile-service-helm-any-changed == 'true') ||
       (needs.build-push-image.result == 'skipped' && needs.check-changed-files.outputs.login-service-helm-any-changed == 'true') ||
-      (needs.build-push-image.result == 'skipped' && needs.check-changed-files.outputs.chat-service-helm-any-changed == 'true')
+      (needs.build-push-image.result == 'skipped' && needs.check-changed-files.outputs.chat-service-helm-any-changed == 'true') ||
+      (needs.build-push-image.result == 'success' || needs.check-changed-files.outputs.profile-service-helm-any-changed == 'true' || needs.check-changed-files.outputs.login-service-helm-any-changed == 'true' || needs.check-changed-files.outputs.chat-service-helm-any-changed == 'true')
+      
     steps:
       # Checkout to the repo
       # ** do NOT change this code **
@@ -289,7 +292,8 @@ jobs:
       (needs.build-push-image.result == 'success' && needs.check-changed-files.outputs.profile-service-java-any-changed == 'true') ||
       (needs.build-push-image.result == 'success' && needs.check-changed-files.outputs.login-service-java-any-changed == 'true') || 
       (needs.build-push-image.result == 'skipped' && needs.check-changed-files.outputs.profile-service-helm-multi-cloud-any-changed == 'true') ||
-      (needs.build-push-image.result == 'skipped' && needs.check-changed-files.outputs.login-service-helm-multi-cloud-any-changed == 'true')
+      (needs.build-push-image.result == 'skipped' && needs.check-changed-files.outputs.login-service-helm-multi-cloud-any-changed == 'true') ||
+      (needs.build-push-image.result == 'success' || needs.check-changed-files.outputs.profile-service-helm-multi-cloud-any-changed == 'true' || needs.check-changed-files.outputs.login-service-helm-multi-cloud-any-changed == 'true')
     steps:
       # Checkout to the repo
       # ** do not change this code **
