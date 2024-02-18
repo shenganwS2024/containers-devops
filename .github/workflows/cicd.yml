@@ -139,7 +139,7 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          credentials_json: $GCP_SA_KEY
       # TODO: Setup gcloud CLI
       # Document: set up gcloud CLI https://github.com/marketplace/actions/set-up-gcloud-cloud-sdk-environment
       # Hint: Setup Cloud SDK with the "project_id" so that you don't have to specify "--project" in the gcloud commands
@@ -260,7 +260,7 @@ jobs:
           needs.check-changed-files.outputs.profile-service-java-any-changed == 'true' || 
           (needs.build-push-image.result == 'skipped' && needs.check-changed-files.outputs.profile-service-helm-any-changed == 'true')
         run: |
-          helm upgrade --install profile-service ./profile-service/src/main/helm/profile
+          helm upgrade --install profile ./profile-service/src/main/helm/profile
 
       # TODO: Deploy the new login helm chart to GKE cluster with helm with the bash script in `run`
       - name: Deploy login-service to the cluster with helm
@@ -268,7 +268,7 @@ jobs:
           needs.check-changed-files.outputs.login-service-java-any-changed == 'true' ||
           (needs.build-push-image.result == 'skipped' && needs.check-changed-files.outputs.login-service-helm-any-changed == 'true')
         run: |
-          helm upgrade --install login-service ./login-service/src/main/helm/login
+          helm upgrade --install login ./login-service/src/main/helm/login
           
       # TODO: Deploy the new chat helm chart to GKE cluster with helm with the bash script in `run`
       - name: Deploy chat-service to the cluster with helm
@@ -276,7 +276,7 @@ jobs:
           needs.check-changed-files.outputs.chat-service-java-any-changed == 'true' ||
           (needs.build-push-image.result == 'skipped' && needs.check-changed-files.outputs.chat-service-helm-any-changed == 'true')
         run: |
-          helm upgrade --install chat-service ./chat-service/src/main/helm/chat
+          helm upgrade --install chat ./chat-service/src/main/helm/chat
 
   deploy-service-to-az:
     runs-on: ubuntu-latest
