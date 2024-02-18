@@ -120,7 +120,7 @@ jobs:
       - name: Build docker image login-service
         if: needs.check-changed-files.outputs.login-service-java-any-changed == 'true'
         run: |
-          docker build -t ${{ env.AZ_CONTAINER_REGISTRY }}/login-service:${{ env.DOCKER_TAG }} -t gcr.io/${{ env.GCP_PROJECT_ID }}/login-service:${{ env.DOCKER_TAG }} ./login-service
+          docker build -f ./profile-service/Dockerfile . -t ${{ env.AZ_CONTAINER_REGISTRY }}/profile-service:${{ env.DOCKER_TAG }} -t gcr.io/${{ env.GCP_PROJECT_ID }}/profile-service:${{ env.DOCKER_TAG }}
       # TODO
 
       ## chat-service: only deploy to GCP ##
